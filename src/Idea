@@ -1,0 +1,195 @@
+CREATE TABLE address(
+    id SERIAL PRIMARY KEY,
+   city VARCHAR(30),
+   street VARCHAR(50),
+   home_number INT
+);
+
+CREATE TABLE person(
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    age INT,
+    address INT REFERENCES
+        address(id)
+
+);
+
+SELECT * FROM address;
+SELECT * FROM person;
+
+INSERT INTO address(city, street, home_number)
+VALUES('Bishkek','8 mkr', 108),
+      ('Cholpon-Ata','Sovetskya', 59),
+      ('Mannheim','R6', 14);
+
+INSERT INTO person(first_name, last_name, age, address)
+VALUES('Askar','Almazbekov', 32, 3),
+      ('Aktan','Ishembekov', 21, 1),
+      ('Nurkyz','Almazbekova', 24, 2),
+      ('Tilek','Ayakeev', 27, 1),
+      ('Kymbat','Ishembekova', 30, 3);
+
+   +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+   CREATE TABLE language(
+       id SERIAL PRIMARY KEY,
+       name_lan VARCHAR
+   );
+   CREATE TABLE continents(
+       id SERIAL PRIMARY KEY,
+       name_con VARCHAR
+   );
+
+   CREATE TABLE country(
+       id SERIAL PRIMARY KEY,
+       name_county VARCHAR,
+       capital VARCHAR,
+       population_mln FLOAT,
+       area_km2 FLOAT,
+       continents_id INT REFERENCES continents(id),
+       language_id INT REFERENCES language(id)
+
+   );
+
+   SELECT * FROM language;
+   SELECT * FROM continents;
+   SELECT * FROM country;
+
+   INSERT INTO language(name_lan)
+   VALUES('German'),
+         ('English'),
+         ('French'),
+         ('Portuguese'),
+         ('Kyrgyz'),
+         ('Japanese');
+
+   INSERT INTO continents(name_con)
+   VALUES('Asia'),
+         ('Europe'),
+         ('Africa'),
+         ('America');
+
+   INSERT INTO country(name_county, capital, population_mln, area_km2, continents_id, language_id)
+   VALUES('Kyrgyzstan','Bishkek', 7, 199951, 1, 5),
+         ('Germany','Berlin', 83.6, 357592, 2, 1),
+         ('Brazil','Brasilia', 217.3, 8.5, 4, 4),
+         ('USA','Washington', 331.5, 9.5, 4, 2),
+         ('France','Paris', 67.9, 643801, 2, 3),
+         ('Japan','Tokyo', 124.2, 377975, 1, 6);
+
+********************************************************************************************************
+
+CREATE TABLE form(
+    id SERIAL,
+    first_name VARCHAR(40) NOT NULL,
+    last_name VARCHAR(40)  NOT NULL,
+    date_of_birth DATE,
+    email VARCHAR UNIQUE,
+    phone VARCHAR
+);
+
+SELECT * FROM form;
+
+INSERT INTO form(first_name, last_name, date_of_birth, email, phone)
+VALUES ('Askar','Almazbekov','1990-12-29)','askar@gmail.com','+4915252434005'),
+       ('Kymbat','Ishembekova','1992-08-28','kymbat@gmail.com','+996707345543'),
+       ('Aktan', 'Ishembekov','2002-09-21','aktan@gmail.com','+996505654456'),
+       ('Nurkyz','Almazbekova','1999-08-20','nurkyz@gmail.com','+996705987789'),
+       ('Syrtbek','Duishonaliev','1989-10-21','syrtbek@gmail.com','+996702123321'),
+       ('Nargiza','Omurzakova','1994-02-04','nargiza@gmail.com','+996555876678'),
+       ('Emil','Japarov','1989-04-17','emil@gmail.com','+996707234432');
+
+*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
+
+CREATE TABLE cinema(
+    id SERIAL PRIMARY KEY,
+    name_cinema VARCHAR(30)
+);
+
+CREATE TABLE movies(
+    id SERIAL PRIMARY KEY,
+    name_m VARCHAR(65),
+    year_m DATE,
+    director VARCHAR(40),
+    actors VARCHAR [2],
+    cinema_id INT REFERENCES cinema(id)
+
+);
+
+SELECT * FROM movies;
+SELECT * FROM cinema;
+
+INSERT INTO cinema(name_cinema)
+VALUES('Manas'),('Rossiya'),('Ala-Too'),
+      ('Cinema'),('Cosmo park');
+
+INSERT INTO movies(name_m, year_m, director, actors, cinema_id)
+VALUES('Prison break','2005-08-29','Paul Scheuring',
+       ARRAY['Wentworth Miller','Domenic Purcell'], 2),
+      ('La Casa de Papel','2017-05-02','Alex Pina',
+       ARRAY['Alvaro Morte','Itziar Ituno'], 5),
+      ('Shawshank redemption','1994-10-07','Frank Darabont',
+       ARRAY['Morgan Freeman','Tim Robbins'], 4),
+      ('Squid Game','2021-09-17','Hwang Dong-hyuk',
+       ARRAY['Lee Jung-jae','Lee You-mi'], 3),
+      ('Law Abiding Citizen','2009-10-16','F.Gray Gray',
+       ARRAY['Gerard Butler','Jamie Foxx'], 1),
+      ('Catch Me If You Can','2002-12-25','Steven Speilberg',
+       ARRAY['Leonardo DiCaprio','Tom Hanks'], 4),
+      ('Harriet','2019-09-10','Kasi Lemmons',
+       ARRAY['Cynthia Erivo','Leslie Odom Jr.','Joe Alwyn'], 2);
+
+SELECT name_m FROM movies WHERE name_m = 'Squid Game';
+SELECT name_m FROM movies WHERE year_m BETWEEN '2009-10-16' AND '2021-09-17';
+
+--------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE menu(
+    id SERIAL PRIMARY KEY,
+    name_food VARCHAR(50),
+    food_price_EUR DECIMAL,
+    ingredients text [],
+    drinks_id INT REFERENCES drinks(id),
+    restaurant_id INT REFERENCES restaurant(id)
+
+);
+
+CREATE TABLE drinks(
+    id SERIAL PRIMARY KEY,
+    name_drinks_and_price VARCHAR [10] [10]
+);
+
+
+CREATE TABLE restaurant(
+    id SERIAL PRIMARY KEY,
+    name_res VARCHAR(50)
+);
+
+SELECT * FROM menu;
+SELECT * FROM restaurant;
+SELECT * FROM drinks;
+
+INSERT INTO menu(name_food, food_price_EUR, ingredients, drinks_id, restaurant_id)
+VALUES ('Paella de Carne','21', ARRAY ['Spanish rice stir-fry',
+        'assorted meats','vegetables'], 1, 1),
+       ('Paella Valenciana','26.30', ARRAY ['Spanish rice pan',
+        'various seafood', 'chicken', 'vegetables'], 1, 1),
+       ('Pechuga de pollo a la plancha','28.50', ARRAY ['Grilled chicken breast fillet',
+        'sauce', 'grilled potatoes', 'salad garnish'], 1, 1),
+       ('Salmon a la plancha','23.80', ARRAY ['Grilled salmon',
+        'brandy sauce', 'rice', 'salad garnish'], 1, 1);
+
+INSERT INTO drinks(name_drinks_and_price)
+VALUES( ARRAY [['Apple juice','Orange juice','Still water','Black tea',
+    'Green tea','Cola','Latte macchiato','Cappuccino'],
+       ['2.90','2.90','2.10','2.50','2.50','2.60','3.90','2.80']]);
+
+INSERT INTO restaurant(name_res)
+VALUES('Andalusia');
+
+SELECT name_food FROM menu
+WHERE menu.name_food LIKE '%Paella de Carne%';
+
+SELECT food_price_EUR FROM menu
+WHERE food_price_EUR BETWEEN 20 AND 24;

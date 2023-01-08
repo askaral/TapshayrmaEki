@@ -1,0 +1,30 @@
+CREATE TABLE country(
+   id SERIAL PRIMARY KEY,
+   name_con VARCHAR(40));
+
+CREATE TABLE car(
+   id SERIAL PRIMARY KEY,
+   modell VARCHAR(40),
+   colour VARCHAR(40),
+   speed INT,
+   year_of_issue INT,
+   country_id INT REFERENCES country(id));
+
+SELECT * FROM country;
+SELECT * FROM car;
+
+INSERT INTO country(name_con)
+VALUES('Germany'),
+      ('Japan'),
+	  ('Korea'),
+	  ('USA');
+
+INSERT INTO car(modell, colour, speed, year_of_issue, country_id)
+VALUES('Toyota','red', 230, 2015, 2),
+      ('Mercedes','White', 250, 2010, 1),
+	  ('Ford','Blue', 220, 2007, 4),
+	  ('Audi','Black', 260, 2018, 1),
+	  ('Kia','brown', 280, 2020, 3),
+	  ('BMW','dark blue', 300, 2015, 1),
+	  ('Hundai','black', 250, 2021, 3);
+
